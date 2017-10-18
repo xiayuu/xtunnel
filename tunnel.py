@@ -7,7 +7,7 @@ import os
 
 tun = pytun.open()
 os.system("ip link set %s up" % tun.name)
-os.system("ip link set dev %s mtu 520")
+os.system("ip link set dev %s mtu 520" % tun.name)
 os.system("ip addr add 192.167.100.1/24 dev %s" % tun.name)
 
 endpoint = set()
