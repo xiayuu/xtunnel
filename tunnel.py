@@ -20,7 +20,8 @@ def handle(fd):
             x = fd.readline()
             print("net recv:%s" % x)
             tun.send(x)
-        except Exception:
+        except Exception,e:
+            print(e)
             break
 
 def handletap():
@@ -32,7 +33,8 @@ def handletap():
             if not server:
                 server = eventlet.connect((sys.argv[1], 25702))
             server.sendall(msg)
-        except Exception:
+        except Exception,e:
+            print(e)
             server = None
 
 eventlet.spawn_n(handletap)
