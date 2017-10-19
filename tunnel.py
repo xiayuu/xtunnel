@@ -4,6 +4,7 @@
 import eventlet
 import pytun
 import os
+import sys
 
 tun = pytun.open()
 os.system("ip link set %s up" % tun.name)
@@ -12,22 +13,25 @@ os.system("ip addr add 192.167.100.1/24 dev %s" % tun.name)
 
 endpoint = set()
 
+
 def handle(fd):
-    endpoint.add(fd)
     while True:
         try:
             x = fd.readline()
             tun.send(x)
         except Exception:
             break
-    endpoint.remove(fd)
 
 def handletap():
+    server = None
     while True:
         msg = tun.recv()
-        for e in endpoint:
-            e.write(msg)
-            e.flush()
+        try:
+            if not server:
+                server = eventlet.connect((sys.argv[1], 25702))
+            server.sendall(msg)
+        except Exception:
+            server = None
 
 eventlet.spawn_n(handletap)
 server = eventlet.listen(('0.0.0.0', 25702))
