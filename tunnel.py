@@ -18,6 +18,7 @@ def handle(fd):
     while True:
         try:
             x = fd.readline()
+            print(x)
             tun.send(x)
         except Exception:
             break
@@ -26,6 +27,7 @@ def handletap():
     server = None
     while True:
         msg = tun.recv()
+        print(msg)
         try:
             if not server:
                 server = eventlet.connect((sys.argv[1], 25702))
