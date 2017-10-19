@@ -18,7 +18,6 @@ def handle(sock):
     while True:
         try:
             x = sock.recv(520)
-            print("net recv:%s" % x)
             tun.send(x)
         except Exception,e:
             print(e)
@@ -28,7 +27,6 @@ def handletap():
     server = None
     while True:
         msg = tun.recv()
-        print("tun recv:%s" % msg)
         try:
             if not server:
                 server = eventlet.connect((sys.argv[1], 25702))
