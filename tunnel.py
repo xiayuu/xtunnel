@@ -24,16 +24,16 @@ def handle(sock):
             break
 
 def handletap():
-    server = None
+    net = None
     while True:
         msg = tun.recv()
         try:
-            if not server:
-                server = eventlet.connect((sys.argv[1], 25702))
+            if not net:
+                net = eventlet.connect((sys.argv[1], 25702))
             server.sendall(msg)
         except Exception,e:
             print(e)
-            server = None
+            net = None
 
 eventlet.spawn_n(handletap)
 server = eventlet.listen(('0.0.0.0', 25702))
