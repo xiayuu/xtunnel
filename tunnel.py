@@ -30,7 +30,7 @@ def handletap():
         try:
             if not net:
                 net = eventlet.connect((sys.argv[1], 25702))
-            server.sendall(msg)
+            net.sendall(msg)
         except Exception,e:
             print(e)
             net = None
