@@ -14,10 +14,10 @@ os.system("ip addr add 192.167.100.1/24 dev %s" % tun.name)
 endpoint = set()
 
 
-def handle(fd):
+def handle(sock):
     while True:
         try:
-            x = fd.readline()
+            x = sock.recv(520)
             print("net recv:%s" % x)
             tun.send(x)
         except Exception,e:
@@ -42,7 +42,7 @@ server = eventlet.listen(('0.0.0.0', 25702))
 while True:
     try:
         new_sock, address = server.accept()
-        eventlet.spawn_n(handle, new_sock.makefile('rw'))
+        eventlet.spawn_n(handle, new_sock)
     except (SystemExit, KeyboardInterrupt):
         tun.close()
         break
